@@ -6,18 +6,28 @@
  * Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
  */
 
-(function (CoverPop, undefined) {
-
+(function () {
     'use strict';
+   function CoverPop(options){
+   this.options = this.util.mergeObj(this.defaults, options);
+   this.closeClassDefaultEls = document.querySelectorAll('.'+this.options.closeClassDefault);
+   this.closeClassNoDefaultEls = document.querySelectorAll('.'+this.options.closeClassNoDefault);
 
-    // set default settings
-    var settings = {
+}
+
+CoverPop.prototype ={
+         /**
+         * Helper methods
+         */
+         defaults : {
 
             // set default cover id
             coverId: 'CoverPop-cover',
 
             // duration (in days) before it pops up again
             expires: 30,
+
+            expiresNoShow:       100,
 
             // close if someone clicks an element with this class and prevent default action
             closeClassNoDefault: 'CoverPop-close',
@@ -50,51 +60,26 @@
             hideAfter: null
         },
 
-
-        // grab the elements to be used
-        $el = {
-            html: document.getElementsByTagName('html')[0],
-            cover: document.getElementById(settings.coverId),
-            closeClassDefaultEls: document.querySelectorAll('.' + settings.closeClassDefault),
-            closeClassNoDefaultEls: document.querySelectorAll('.' + settings.closeClassNoDefault)
-        },
-
-
-        /**
+         /**
          * Helper methods
          */
 
-        util = {
+         util : {
+
 
             hasClass: function(el, name) {
                 return new RegExp('(\\s|^)' + name + '(\\s|$)').test(el.className);
             },
 
             addClass: function(el, name) {
-                if (!util.hasClass(el, name)) {
+                if (!this.hasClass(el, name)) {
                     el.className += (el.className ? ' ' : '') + name;
                 }
             },
 
             removeClass: function(el, name) {
-                if (util.hasClass(el, name)) {
+                if (this.hasClass(el, name)) {
                     el.className = el.className.replace(new RegExp('(\\s|^)' + name + '(\\s|$)'), ' ').replace(/^\s+|\s+$/g, '');
-                }
-            },
-
-            addListener: function(target, type, handler) {
-                if (target.addEventListener) {
-                    target.addEventListener(type, handler, false);
-                } else if (target.attachEvent) {
-                    target.attachEvent('on' + type, handler);
-                }
-            },
-
-            removeListener: function(target, type, handler) {
-                if (target.removeEventListener) {
-                    target.removeEventListener(type, handler, false);
-                } else if (target.detachEvent) {
-                    target.detachEvent('on' + type, handler);
                 }
             },
 
@@ -106,7 +91,7 @@
             setCookie: function(name, days) {
                 var date = new Date();
                 date.setTime(+ date + (days * 86400000));
-                document.cookie = name + '=true; expires=' + date.toGMTString() + '; path=/';
+                document.cookie = name + '=true; expires=' + date.toGMTString() + '; path=/';                
             },
 
             hasCookie: function(name) {
@@ -133,132 +118,122 @@
             },
 
             mergeObj: function(obj1, obj2) {
-                for (var attr in obj2) {
-                    obj1[attr] = obj2[attr];
+                for (var key in obj2) {
+                    if( obj2.hasOwnProperty( key ) ) {
+                        obj1[key] = obj2[key];
+                    }
                 }
+                return obj1;
             }
         },
-
 
         /**
          * Private Methods
          */
 
-        // close popup when user hits escape button
-        onDocUp = function(e) {
-            if (settings.closeOnEscape) {
-                if (e.keyCode === 27) {
-                    CoverPop.close();
+        _openCallback: function(){
+            var self = this;
+            if(self.options.onPopUpOpen !== null){
+                if (self.util.isFunction(self.options.onPopUpOpen)){
+                    self.options.onPopUpOpen.call();
+                } else {
+                    throw new TypeError("Call back function must be a function");
                 }
             }
         },
 
-        openCallback = function() {
-
-            // if not the default setting
-            if (settings.onPopUpOpen !== null) {
-
-                // make sure the callback is a function
-                if (util.isFunction(settings.onPopUpOpen)) {
-                    settings.onPopUpOpen.call();
+        _closeCallback: function(){
+            var self = this;
+            if(self.options.onPopUpClose !== null){
+                if (self.util.isFunction(self.options.onPopUpClose)){
+                    self.options.onPopUpClose.call();
                 } else {
-                    throw new TypeError('CoverPop open callback must be a function.');
+                    throw new TypeError("Call back function must be a function");
                 }
             }
         },
-
-        closeCallback = function() {
-
-            // if not the default setting
-            if (settings.onPopUpClose !== null) {
-
-                // make sure the callback is a function
-                if (util.isFunction(settings.onPopUpClose)) {
-                    settings.onPopUpClose.call();
-                } else {
-                    throw new TypeError('CoverPop close callback must be a function.');
-                }
-            }
-        };
-
-
-
     /**
      * Public methods
      */
 
-    CoverPop.open = function() {
+    open: function(){
 
+        var self = this;
         var i, len;
 
-        if (util.hashExists(settings.delayHash)) {
-            util.setCookie(settings.cookieName, 1); // expire after 1 day
+        if(self.util.hashExists(self.options.delayHash)){
+            self.util.setCookie(self.options.cookieName, 1);
             return;
         }
 
-        util.addClass($el.html, 'CoverPop-open');
+        self.util.addClass(document.body, 'CoverPop-open');
 
-        // bind close events and prevent default event
-        if ($el.closeClassNoDefaultEls.length > 0) {
-            for (i=0, len = $el.closeClassNoDefaultEls.length; i < len; i++) {
-                util.addListener($el.closeClassNoDefaultEls[i], 'click', function(e) {
-                    if (e.target === this) {
-                        util.preventDefault(e);
-                        CoverPop.close();
+        if (self.closeClassNoDefaultEls.length > 0){
+            for (i = 0, len = self.closeClassNoDefaultEls.length; i < len; i ++){
+                self.closeClassNoDefaultEls[i].addEventListener("click", function(e){
+                    if (e.target === this){
+                        self.util.preventDefault(e);
+                        self.close(self.options.expires);
                     }
                 });
             }
         }
 
-        // bind close events and continue with default event
-        if ($el.closeClassDefaultEls.length > 0) {
-            for (i=0, len = $el.closeClassDefaultEls.length; i < len; i++) {
-                util.addListener($el.closeClassDefaultEls[i], 'click', function(e) {
-                    if (e.target === this) {
-                        CoverPop.close();
+        if (self.closeClassDefaultEls.length > 0){
+            for (i = 0, len = self.closeClassDefaultEls.length; i < len; i ++){
+                self.closeClassDefaultEls[i].addEventListener('click', function(e){
+                    if(e.target == this){
+                        self.close(self.options.expiresNoShow);
                     }
                 });
             }
         }
 
-        // bind escape detection to document
-        util.addListener(document, 'keyup', onDocUp);
-        openCallback();
-    };
+        self._openCallback();
+    },
 
-    CoverPop.close = function(e) {
-        util.removeClass($el.html, 'CoverPop-open');
-        util.setCookie(settings.cookieName, settings.expires);
+    close: function(duration){
+        var self = this;
 
-        // unbind escape detection to document
-        util.removeListener(document, 'keyup', onDocUp);
-        closeCallback();
-    };
+        self.util.removeClass(document.body, 'CoverPop-open');
+        self.util.setCookie(self.options.cookieName, duration);
+        self._closeCallback();
+    },
 
-    CoverPop.init = function(options) {
-        if (navigator.cookieEnabled) {
-            util.mergeObj(settings, options);
-
-            // check if there is a cookie or hash before proceeding
-            if (!util.hasCookie(settings.cookieName) || util.hashExists(settings.forceHash)) {
-                if (settings.delay === 0) {
-                    CoverPop.open();
-                } else {
-                    // delay showing the popup
-                    setTimeout(CoverPop.open, settings.delay);
-                }
-                if (settings.hideAfter) {
-                    // hide popup after the set amount of time
-                    setTimeout(CoverPop.close, settings.hideAfter + settings.delay);
+    init : function(){
+        var self = this;
+        console.log(document.cookie);
+        var onDocup = function(e){
+            if(self.options.closeOnEscape){
+                if (e.keyCode === 27){
+                    self.close();
                 }
             }
         }
-    };
 
-    // alias
-    CoverPop.start = function(options) {
-        CoverPop.init(options);
-    };
+        if(navigator.cookieEnabled){
+            if(!self.util.hasCookie(self.options.cookieName) || self.util.hashExists(self.options.forceHash)){
+                console.log("no cookies");
+                document.addEventListener('keyup', onDocup, false);
+                if((self.options.delay) === 0){
+                    self.open();
+                }else{
+                    setTimeout(self.open(), self.options.delay);
+                }
+
+                if (self.options.hideAfter){
+                    setTimeout(self.close(), self.options.hideAfter + self.options.delay);
+                    document.removeEventListener('keyup', onDocup, false);
+                }
+            }
+        } else {
+            alert("Cookie not enabled");
+        }
+    }
+
+}
+
+window.CoverPop = CoverPop;
+})();
 
 
-}(window.CoverPop = window.CoverPop || {}));
