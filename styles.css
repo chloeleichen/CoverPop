@@ -21,8 +21,8 @@ body {
 }
 
 #CoverPop-cover {
-
-    position: absolute;
+    display: none;
+    position: fixed;
     opacity: 0;
     overflow-y: scroll;
     top: 0;
@@ -38,8 +38,8 @@ body {
 }
 
 .CoverPop-open #CoverPop-cover {
-    position: fixed;
     opacity: 1;
+    display: block;
 }
 
 

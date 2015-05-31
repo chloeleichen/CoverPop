@@ -226,10 +226,8 @@ var coverPop = function(options){
 
     self.init = function(){
         if(navigator.cookieEnabled){
-
             if(!util.hasCookie(self.options.cookieName) || util.hashExists(self.options.forceHash)){
                 if(self.options.delay === 0){
-
                     open();
                 }else {
                     setTimeout(open(), self.options.delay);
