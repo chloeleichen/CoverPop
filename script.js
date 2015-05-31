@@ -25,6 +25,8 @@ console.log(c);
 
 c.init();
 
+// CoverPop.start();
+
 
 	
  })();
