@@ -7,7 +7,7 @@
  */
 
  (function () {
-   // 'use strict';
+    'use strict';
     /**
     * Helper methods
     */
@@ -159,6 +159,8 @@ var coverPop = function(options){
 
         };
 
+    //Public methods 
+
     var open = function(){
         var i, len;
         //if has delay hash, then set cookies to 1 day
@@ -206,16 +208,19 @@ var coverPop = function(options){
                 });
             }
         }
+
         document.addEventListener("keyup", onDocup, false);
         openCallback();
+
     }
+
 
     var close = function(){
         util.removeClass(document.body, "CoverPop-open");
         document.removeEventListener('keyup', onDocup);
         closeCallback();
     }
-    //Public methods 
+
     self.init = function(){
         if(navigator.cookieEnabled){
 
