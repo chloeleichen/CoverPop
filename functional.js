@@ -97,8 +97,10 @@ var coverPop = function(options){
 
         function Default(e){
             if(e.target === this){
-                        close();
-                        util.setCookie(self.options.cookieName, self.options.expiresLong);
+                console.log("default");
+                        // close();
+
+                        //util.setCookie(self.options.cookieName, self.options.expiresLong);
                     }
         }
 

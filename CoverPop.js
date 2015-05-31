@@ -127,7 +127,7 @@ var coverPop = function(options){
         var onDocup = function(e){
             if(self.options.closeOnEscape){
                 if(e.keyCode === 27){
-                    self.close();
+                    close();
                 }
             }
         };
@@ -170,7 +170,7 @@ var coverPop = function(options){
 
         function Default(e){
             if(e.target === this){
-                        close();
+                        //close();
                         util.setCookie(self.options.cookieName, self.options.expiresLong);
                     }
         }
@@ -214,7 +214,7 @@ var coverPop = function(options){
             }
         }
 
-        document.addEventListener("keyup", onDocup, false);
+        //document.addEventListener("keyup", onDocup, false);
         openCallback();
     };
 

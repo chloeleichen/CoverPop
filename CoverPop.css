@@ -16,7 +16,7 @@ body {
 }
 
 #CoverPop-cover {
-    display: none;
+
     position: fixed;
     overflow-y: scroll;
     top: 0;
