@@ -2,7 +2,7 @@
 
 CoverPop is modal splash page plugin that is easily styleable.
 
-#This is a folk of CoverPop by [Tyler Person](https://github.com/tylerpearson) with added Cookie integration 
+#This is a fork of CoverPop by [Tyler Person](https://github.com/tylerpearson) with added Cookie integration 
 
 You can set two cookies, Cookie1 is set when use click "close for now", Cookie2 is set when user click do not show again. 
 
