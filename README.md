@@ -2,12 +2,11 @@
 
 CoverPop is modal splash page plugin that is easily styleable.
 
-#This is a copy of CoverPop by Tyler Person with Cookie integration 
+#This is a folk of CoverPop by [Tyler Person](https://github.com/tylerpearson) with added Cookie integration 
 
 ## Website
 
 [View Original Website](http://coverpopjs.com)
-
 
 
 ## Demo
