@@ -6,7 +6,7 @@ CoverPop is modal splash page plugin that is easily styleable.
 
 You can set two cookies, Cookie1 is set when use click "close for now", Cookie2 is set when user click do not show again. 
 
-In the demo, cookie1 is set to 30 days and cookie 2 is set 100 days.
+In the demo, cookie1 is set to 30 days and cookie2 is set 100 days.
 
 You can set cookie1 to be very short, and cookie2 to be very long
 
