@@ -1,8 +1,6 @@
 (function(){
 
 var c = new CoverPop({
-  // set default cover id
-    coverId: 'CoverPop-cover',
     expires: 0.1,
     expiresLong:100,
     closeClassNoDefault: 'CoverPop-close',

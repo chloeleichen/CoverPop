@@ -71,10 +71,6 @@
 var CoverPop = function(options){
     var self = {},
     defaults = {
-
-            // set default cover id
-            coverId: 'CoverPop-cover',
-
             // duration (in days) before it pops up again
             expires: 30,
 
@@ -228,17 +224,13 @@ var CoverPop = function(options){
                     open();
                 }else {
                     setTimeout(open, self.options.delay);
-                    console.log(self.options.delay);
-                    //setTimeout(function(){ alert("Hello"); }, 20000);
                 }
                 if (self.options.hideAfter){
                     setTimeout(close(), self.options.hideAfter + self.options.delay);
                 }
             }
-
         }
     };
-
     return self;
 };
 
