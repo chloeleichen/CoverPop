@@ -1,8 +1,5 @@
 /*!
- * CoverPop 2.5.0
- * http://coverpopjs.com
- *
- * Copyright (c) 2014 Tyler Pearson
+ * CoverPop
  * Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
  */
 
@@ -36,7 +33,7 @@
         setCookie: function(name, days) {
             var date = new Date();
             date.setTime(+ date + (days * 86400000));
-            document.cookie = name + '=true; expires=' + date.toGMTString() + '; path=/';                
+            document.cookie = name + '=true; expires=' + date.toGMTString() + '; path=/';
         },
 
         hasCookie: function(name) {
@@ -71,7 +68,7 @@
     }
 };
 
-var coverPop = function(options){
+var CoverPop = function(options){
     var self = {},
     defaults = {
 
@@ -81,7 +78,7 @@ var coverPop = function(options){
             // duration (in days) before it pops up again
             expires: 30,
 
-            expiresLong:       100,
+            expiresLong:100,
 
             // close if someone clicks an element with this class and prevent default action
             closeClassNoDefault: 'CoverPop-close',
@@ -121,7 +118,7 @@ var coverPop = function(options){
         var closeClassDefaultEls = document.querySelectorAll('.' + self.options.closeClassDefault);
         //close button prevents default bahaviour
         var closeClassNoDefaultEls = document.querySelectorAll('.'+self.options.closeClassNoDefault);
-        //close button supress popup from showing again and no default behaviour 
+        //close button supress popup from showing again and no default behaviour
         var closeClassNoShowEls = document.querySelectorAll('.'+self.options.closeClassNoShow);
 
         var onDocup = function(e){
@@ -191,7 +188,7 @@ var coverPop = function(options){
                     }
         }
 
-        //bind closing event 
+        //bind closing event
         if(closeClassDefaultEls.length > 0){
             len = closeClassDefaultEls.length;
             for(i = 0; i <len; i +=1 ){
@@ -230,7 +227,9 @@ var coverPop = function(options){
                 if(self.options.delay === 0){
                     open();
                 }else {
-                    setTimeout(open(), self.options.delay);
+                    setTimeout(open, self.options.delay);
+                    console.log(self.options.delay);
+                    //setTimeout(function(){ alert("Hello"); }, 20000);
                 }
                 if (self.options.hideAfter){
                     setTimeout(close(), self.options.hideAfter + self.options.delay);
@@ -243,7 +242,7 @@ var coverPop = function(options){
     return self;
 };
 
-window.coverPop = coverPop;
+window.CoverPop = CoverPop;
 
 })();
 
