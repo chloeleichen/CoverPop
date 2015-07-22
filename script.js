@@ -1,7 +1,7 @@
 (function(){
 
 var c = new CoverPop({
-    expires: 0.1,
+    expires: 0,
     expiresLong:100,
     closeClassNoDefault: 'CoverPop-close',
     closeClassDefault: 'CoverPop-close-go',
